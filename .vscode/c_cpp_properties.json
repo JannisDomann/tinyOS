@@ -1,0 +1,20 @@
+{
+    "configurations": [
+        {
+            "name": "AVR",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/usr/local/Cellar/avr-gcc@9/9.4.0_1/avr/include"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/local/bin/avr-gcc",
+            "cStandard": "gnu99",
+            "cppStandard": "c++14",
+            "intelliSenseMode": "macos-clang-x64",
+            "compilerArgs": [
+                "-mmcu=atmega32"
+            ]
+        }
+    ],
+    "version": 4
+}
