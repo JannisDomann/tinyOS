@@ -1,7 +1,7 @@
 #include "rnlib.h"
 
 /* delay */
-void RNLIB::delay(const uint16_t& s) {
+void RNLIB::delay(const uint16_t s) {
 	RNLIB::initTimer0(PRESC01024, NORMAL, NORMAL, 0x7D);
 	for (uint16_t i=0; i<s; i++) {
 		for (uint8_t i=0; i<0x7D; i++) {
@@ -11,7 +11,7 @@ void RNLIB::delay(const uint16_t& s) {
 	}
 }
 
-void RNLIB::delay_ms(const uint16_t& ms) {
+void RNLIB::delay_ms(const uint16_t ms) {
 	RNLIB::initTimer0(PRESC064, NORMAL, NORMAL, 0xFA);
 	for (uint16_t i=0; i<ms; i++) {
 		while (TCNT0 != OCR0) {}
@@ -34,7 +34,7 @@ void RNLIB::delay_us(uint16_t us) {
 }
 
 /* pin/port configurations */
-void RNLIB::pinMode(volatile uint8_t& port, const uint8_t& mode, const uint8_t& pin) {
+void RNLIB::pinMode(volatile uint8_t& port, const uint8_t mode, const uint8_t pin) {
 	if (pin >= 0x08)
 		port = mode;
 	else if (mode == INPUT)
@@ -43,7 +43,7 @@ void RNLIB::pinMode(volatile uint8_t& port, const uint8_t& mode, const uint8_t& 
 		SETBIT(port, pin);
 }
 
-void RNLIB::portWrite(volatile uint8_t& port, const uint8_t& value) {
+void RNLIB::portWrite(volatile uint8_t& port, const uint8_t value) {
 	port = value;
 }
 
@@ -51,14 +51,14 @@ uint8_t RNLIB::portRead(volatile uint8_t& port) {
 	return port;
 }
 
-void RNLIB::pinWrite(volatile uint8_t& port, const uint8_t& pin, const uint8_t& value) {
-	if (value == HIGH)
+void RNLIB::pinWrite(volatile uint8_t& port, const uint8_t pin, const uint8_t value) {
+	if (value > 0x00)
 		SETBIT(port, pin);
-	else if (value == LOW)
+	else
 		CLEARBIT(port, pin);
 }
 
-uint8_t RNLIB::pinRead(volatile uint8_t& port, const uint8_t& pin) {
+uint8_t RNLIB::pinRead(volatile uint8_t& port, const uint8_t pin) {
 	return CHECKBIT(port, pin);
 }
 
@@ -66,7 +66,7 @@ uint8_t RNLIB::pinRead(volatile uint8_t& port, const uint8_t& pin) {
 /* USART */
 FILE RNLIB::usartStream = FDEV_SETUP_STREAM(RNLIB::usartPutC, RNLIB::usartGetC, _FDEV_SETUP_RW) ;
 
-void RNLIB::initUSART(uint32_t baudrate, const uint8_t& characters, const uint8_t& stoppbits, const uint8_t& parity) {
+void RNLIB::initUSART(uint32_t baudrate, const uint8_t characters, const uint8_t stoppbits, const uint8_t parity) {
 
 	/* set baudrate
 		*/
@@ -111,11 +111,11 @@ int RNLIB::usartGetC(FILE* file) {
 /* I2C */
 // void initI2C() {}
 
-// void sendI2C(const uint8_t& data) {}
+// void sendI2C(const uint8_t data) {}
 
 
 /* ADC */
-void RNLIB::initADC(const uint8_t& refVoltage, const bool& interrupt, const uint8_t& mode) {
+void RNLIB::initADC(const uint8_t refVoltage, const bool& interrupt, const uint8_t mode) {
 	/* set prescaler to 128 
 		annot.: adc frequency should be between 50-200kHz,
 		so at 16MHz the prescaler must be between 80-320,
@@ -150,7 +150,7 @@ void RNLIB::initADC(const uint8_t& refVoltage, const bool& interrupt, const uint
 	}
 }
 
-uint16_t RNLIB::adcGetSingle(const uint8_t& channel, const uint8_t& countMeas) {
+uint16_t RNLIB::adcGetSingle(const uint8_t channel, const uint8_t countMeas) {
 	uint16_t value;
 
 	/* set channel
@@ -252,7 +252,7 @@ void RNLIB::resetTimer1A() {
 
 
 /* EEPROM */
-void RNLIB::eepromWrite(const uint16_t& address, const uint8_t data) {
+void RNLIB::eepromWrite(const uint16_t address, const uint8_t data) {
 	/* temp store status reg
 		*/
 	uint8_t stateSREG = SREG;
@@ -289,7 +289,7 @@ void RNLIB::eepromWrite(const uint16_t& address, const uint8_t data) {
 	SREG = stateSREG;
 }
 
-uint8_t RNLIB::eepromRead(const uint16_t& address) {
+uint8_t RNLIB::eepromRead(const uint16_t address) {
 	/* temp store status reg
 		*/
 	uint8_t stateSREG = SREG;
@@ -324,12 +324,12 @@ uint8_t RNLIB::eepromRead(const uint16_t& address) {
 	return data;
 }
 
-void RNLIB::eepromWrite(const uint16_t& address, uint8_t* buffer, const uint8_t& size) {
+void RNLIB::eepromWrite(const uint16_t address, uint8_t* buffer, const uint8_t size) {
 	for (uint16_t i=0; i<size; i++)
 		eepromWrite(address+i, buffer[i]);
 }
 
-uint16_t RNLIB::eepromRead(const uint16_t& address, uint8_t* buffer) {
+uint16_t RNLIB::eepromRead(const uint16_t address, uint8_t* buffer) {
 	uint16_t i=-1;
 
 	do {
@@ -407,24 +407,24 @@ double RNLIB::getVdd() {
 }
 
 /* led */
-void RNLIB::setLed(const uint8_t& led) {
+void RNLIB::setLed(const uint8_t led) {
 	RNLIB::pinMode(DDRC, OUTPUT, led);
 	RNLIB::pinWrite(PORTC, led, LOW);
 }
 
-void RNLIB::clearLed(const uint8_t& led) {
+void RNLIB::clearLed(const uint8_t led) {
 	RNLIB::pinMode(DDRC, OUTPUT, led);
 	RNLIB::pinWrite(PORTC, led, HIGH);
 }
 
-void RNLIB::toggleLed(const uint8_t& led) {
+void RNLIB::toggleLed(const uint8_t led) {
 	RNLIB::pinMode(DDRC, OUTPUT, led);
 	TOGGLEBIT(PORTC, led);
 }
 
 
 /* speaker */
-void RNLIB::tone(const double& frequency, const uint8_t& length) {
+void RNLIB::tone(const double& frequency, const uint8_t length) {
 	uint8_t pinState = RNLIB::pinRead(DDRD, PD7);
 	RNLIB::pinMode(DDRD, OUTPUT, PD7);
 
@@ -560,7 +560,7 @@ void RNLIB::print7Seg(volatile uint8_t& port, const char& num) {
 
 
 /* Numpad */
-void RNLIB::initPad(volatile uint8_t& ddr, volatile uint8_t& port) {
+void RNLIB::initPad(volatile uint8_t ddr, volatile uint8_t& port) {
 	const uint8_t NUM = 0x04;
 
 	uint8_t rowPins[NUM] = {0x07, 0x06, 0x05, 0x04};
@@ -574,7 +574,7 @@ void RNLIB::initPad(volatile uint8_t& ddr, volatile uint8_t& port) {
 	}
 }
 
-uint8_t RNLIB::readPad(volatile uint8_t& port, volatile uint8_t& pin) {
+uint8_t RNLIB::readPad(volatile uint8_t& port, volatile uint8_t pin) {
 	uint8_t result = 0x00;
 	const uint8_t ROWS = 0x04;
 	const uint8_t COLS = 0x04;
@@ -605,7 +605,7 @@ uint8_t RNLIB::readPad(volatile uint8_t& port, volatile uint8_t& pin) {
 }
 
 /* time */
-void RNLIB::printTime(const uint32_t& time) {
+void RNLIB::printTime(const uint32_t time) {
 	uint8_t hh = time / 3600000;
 	uint8_t mm = (time - hh * 3600000) / 60000;
 	uint8_t ss = (time - hh * 3600000 - mm * 60000) / 1000;

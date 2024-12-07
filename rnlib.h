@@ -78,16 +78,16 @@ namespace RNLIB {
 	
 
 	/* delay */
-	void delay(const uint16_t& s);
-	void delay_ms(const uint16_t& ms);
+	void delay(const uint16_t s);
+	void delay_ms(const uint16_t ms);
 	void delay_us(uint16_t us);
 
 	/* pin/port configurations */
-	void pinMode(volatile uint8_t& port, const uint8_t& mode, const uint8_t& pin = 0x08);
-	void portWrite(volatile uint8_t& port, const uint8_t& value);
+	void pinMode(volatile uint8_t& port, const uint8_t mode, const uint8_t pin = 0x08);
+	void portWrite(volatile uint8_t& port, const uint8_t value);
 	uint8_t portRead(volatile uint8_t& port);
-	void pinWrite(volatile uint8_t& port, const uint8_t& pin, const uint8_t& value);
-	uint8_t pinRead(volatile uint8_t& port, const uint8_t& pin);
+	void pinWrite(volatile uint8_t& port, const uint8_t pin, const uint8_t value);
+	uint8_t pinRead(volatile uint8_t& port, const uint8_t pin);
 
 	/* USART */
 	#undef FDEV_SETUP_STREAM
@@ -103,17 +103,17 @@ namespace RNLIB {
         .udata = 0                 \
     }
 	extern FILE usartStream;
-	void initUSART(uint32_t baudrate, const uint8_t& characters, const uint8_t& stoppbits, const uint8_t& parity);
+	void initUSART(uint32_t baudrate, const uint8_t characters, const uint8_t stoppbits, const uint8_t parity);
 	int usartPutC(char c, FILE* file);
 	int usartGetC(FILE* file);
 
 	/* I2C */
 	// void initI2C();
-	// void sendI2C(const uint8_t& data);
+	// void sendI2C(const uint8_t data);
 
 	/* ADC */
-	void initADC(const uint8_t& refVoltage, const bool& interrupt=false, const uint8_t& mode=0x00);
-	uint16_t adcGetSingle(const uint8_t& channel, const uint8_t& countMeas);
+	void initADC(const uint8_t refVoltage, const bool& interrupt=false, const uint8_t mode=0x00);
+	uint16_t adcGetSingle(const uint8_t channel, const uint8_t countMeas);
 
 	/* TIMER */
 	void initTimer0(const uint8_t prescaler=PRESCNO, const uint8_t mode=NORMAL, const uint8_t comp=NORMAL, const uint8_t value=0x00);
@@ -124,10 +124,10 @@ namespace RNLIB {
 	void resetTimer1A();
 
 	/* EEPROM */
-	void eepromWrite(const uint16_t& address, const uint8_t data);
-	void eepromWrite(const uint16_t& address, uint8_t* buffer, const uint8_t& size);
-	uint8_t eepromRead(const uint16_t& address);
-	uint16_t eepromRead(const uint16_t& address, uint8_t* buffer);
+	void eepromWrite(const uint16_t address, const uint8_t data);
+	void eepromWrite(const uint16_t address, uint8_t* buffer, const uint8_t size);
+	uint8_t eepromRead(const uint16_t address);
+	uint16_t eepromRead(const uint16_t address, uint8_t* buffer);
 
 	/* buttons */
 	uint8_t getButton();
@@ -136,12 +136,12 @@ namespace RNLIB {
 	double getVdd();
 
 	/* led */
-	void setLed(const uint8_t& led);
-	void clearLed(const uint8_t& led);
-	void toggleLed(const uint8_t& led);
+	void setLed(const uint8_t led);
+	void clearLed(const uint8_t led);
+	void toggleLed(const uint8_t led);
 
 	/* speaker */
-	void tone(const double& frequency=440.0, const uint8_t& length=0x60);
+	void tone(const double& frequency=440.0, const uint8_t length=0x60);
 	void beep();
 	void doubleBeep();
 
@@ -149,11 +149,11 @@ namespace RNLIB {
 	void print7Seg(volatile uint8_t& port, const char& num);
 
 	/* Numpad */
-	void initPad(volatile uint8_t& ddr, volatile uint8_t& port);
-	uint8_t readPad(volatile uint8_t& port, volatile uint8_t& pin);
+	void initPad(volatile uint8_t ddr, volatile uint8_t& port);
+	uint8_t readPad(volatile uint8_t& port, volatile uint8_t pin);
 
 	/* time */
-	void printTime(const uint32_t& time);
+	void printTime(const uint32_t time);
 }
 
 #endif // !RNLIB_H
