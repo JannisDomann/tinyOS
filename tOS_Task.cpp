@@ -6,7 +6,7 @@
 volatile uint16_t pxCurrentTCB;
 
 tOS_Task::tOS_Task()
-: _name(""), _callback(nullptr), _priority(tOS_Prio_NO), _state(tOS_State_SUSPENDED) {}
+: _name(""), _callback(nullptr), _priority(tOS_Prio_NONE), _state(tOS_State_SUSPENDED) {}
 
 tOS_Task::tOS_Task(tOS_String name, tOS_Task_Callback callback, tOS_Task_Priority priority, tOS_Task_State state)
 : _name(name), _callback(callback), _priority(priority), _state(state) {
