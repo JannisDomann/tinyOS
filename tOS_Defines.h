@@ -2,7 +2,7 @@
 
 #include "tOS_Types.h"
 
-const tOS_Size tOS_DEF_VEC_STD_CAP = 3;
+const tOS_Size tOS_DEF_VEC_STD_CAP = 4;
 const uint16_t tOS_DEF_MIN_STACK_ADR = 0x0060;
 const uint16_t tOS_DEF_MAX_STACK_ADR = 0x085F;
 const uint16_t tOS_DEF_LOCAL_STACK_SIZE = 0x012C;

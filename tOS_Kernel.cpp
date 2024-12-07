@@ -43,6 +43,18 @@ void tOS_Kernel::start() {
 	_scheduler();
 }
 
+void tOS_Kernel::_rollTasks() {
+	#ifdef VECTOR
+		_tasks.push(_tasks.front());
+		_tasks.pop_front();
+	#else
+		tOS_Task temp = _tasks[0];
+		for (tOS_Size k=1; k<_nTasks; k++)
+			_tasks[k-1] = _tasks[k];
+		_tasks[_nTasks-1] = temp;
+	#endif
+}
+
 void tOS_Kernel::delay_ms(tOS_Size ms) {
 	#ifdef DEBUG	
 		printf("block %s (SP: 0x%04x)\n", _curTask->name(), _curTask->sp());
@@ -54,13 +66,15 @@ void tOS_Kernel::delay_ms(tOS_Size ms) {
 
 void tOS_Kernel::_init() {
 	RNLIB::initUSART(115200, 0x08, 0x01, PARNONE);
+	// RNLIB::initTimer0(PRESC064, CTC0, NORMAL, 0x19-0x01);
+	// RNLIB::initTimer1A(PRESC164, CTC1, NORMAL, 0xFA-0x01); 
 	RNLIB::initTimer0(PRESC064, CTC0, NORMAL, 0xFA-0x01);
-	RNLIB::initTimer1A(PRESC1256, CTC1, NORMAL, 0x271-0x01);
+	RNLIB::initTimer1A(PRESC1256, CTC1, NORMAL, 0x271-0x01); 
 }
 
 void tOS_Kernel::_scheduler() {
-	tOS_Task_Priority min_task_prio = tOS_Prio_NO;
-		
+	tOS_Task_Priority min_task_prio = tOS_Prio_NONE;
+
 	if (_curTask->state() == tOS_State_RUNNING) {
 		#ifdef DEBUG	
 			printf("suspend %s (SP: 0x%04x)\n", _curTask->name(), _curTask->sp());
@@ -96,7 +110,8 @@ void tOS_Kernel::_scheduler() {
 }
 
 void tOS_Kernel::_idle_task() {
-	while (true) 
+	while (true)
+		// printf("idle ");
 		;
 	/* todo:
 		- enter sleepmode

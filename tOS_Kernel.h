@@ -4,9 +4,6 @@
 #include "tOS_Defines.h"
 #include "tOS_Task.h"
 
-// #define DEBUG
-// #define VECTOR
-
 extern "C" void TIMER0_COMP_vect(void) __attribute__((signal));
 extern "C" void TIMER1_COMPA_vect(void) __attribute__((signal, naked));
 
@@ -24,6 +21,7 @@ class tOS_Kernel {
 
 	private:
 		inline static volatile tOS_Size _ticks = 0;
+		inline static volatile tOS_Size _millis = 0;
 			#ifdef VECTOR
 				inline static tOS_Vector<tOS_Task> _tasks;
 			#else
@@ -39,6 +37,7 @@ class tOS_Kernel {
 		static void _scheduleISR(); 
 		static void _scheduler(); 
 		static void _idle_task();
+		static void _rollTasks();
 
 		friend void ::TIMER0_COMP_vect(void);
 		friend void ::TIMER1_COMPA_vect(void);
