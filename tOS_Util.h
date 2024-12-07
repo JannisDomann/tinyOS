@@ -14,7 +14,7 @@ tOS_Size max(tOS_Size a, tOS_Size b);
 template <typename T>
 class tOS_Vector {
 	public:
-		tOS_Vector();
+		tOS_Vector(tOS_Size capacity=tOS_DEF_VEC_STD_CAP);
 		~tOS_Vector();
 
 		tOS_Size capacity() const { return _capacity; }
@@ -22,20 +22,21 @@ class tOS_Vector {
 		T& front() const { return _items[0]; }
 		void push_front(T& item);
 		void pop_front();
-		void push(T& item);
+		virtual void push(T item);
 		void pop();
 		T* begin() { return _items; }
 		T* end() { return (_items+_size); }
 
-	private:
-		tOS_Size _capacity = tOS_DEF_VEC_STD_CAP;
+	protected:
+		tOS_Size _capacity = 0;
 		tOS_Size _size = 0;
 		T* _items;
 };
 
 
 template <typename T>
-tOS_Vector<T>::tOS_Vector() {
+tOS_Vector<T>::tOS_Vector(tOS_Size capacity)
+: _capacity(capacity) {
 	_items = (T*)malloc(sizeof(T)*_capacity);
 }
 
@@ -79,7 +80,7 @@ void tOS_Vector<T>::pop_front() {
 }
 
 template <typename T>
-void tOS_Vector<T>::push(T& item) {
+void tOS_Vector<T>::push(T item) {
 	if (_size == _capacity) {
 		_capacity *= 2;
 		T* new_items = (T*)malloc(sizeof(T)*_capacity);
