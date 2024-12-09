@@ -2,10 +2,10 @@
 
 #include "tOS_Types.h"
 
-const tOS_Size tOS_DEF_VEC_STD_CAP = 4;
+const tOS_Size tOS_DEF_VEC_STD_CAP = 6;
 const uint16_t tOS_DEF_MIN_STACK_ADR = 0x0060;
 const uint16_t tOS_DEF_MAX_STACK_ADR = 0x085F;
-const uint16_t tOS_DEF_LOCAL_STACK_SIZE = 0x012C;
+const uint16_t tOS_DEF_LOCAL_STACK_SIZE = 0x100;
 
 typedef enum {
 	tOS_Prio_REALTIME = 0,
