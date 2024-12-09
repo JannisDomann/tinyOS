@@ -8,7 +8,7 @@ class tOS_Kernel;
 class tOS_Task {
 	public:
 		tOS_Task();
-		tOS_Task(tOS_String name, tOS_Task_Callback callback, tOS_Task_Priority priority=tOS_Prio_NORMAL, tOS_Task_State state=tOS_State_READY);
+		tOS_Task(tOS_String name, tOS_Task_Callback callback, tOS_Task_Priority priority=tOS_Prio_NORMAL, tOS_Task_State state=tOS_State_READY, uint16_t stack_size=tOS_DEF_LOCAL_STACK_SIZE);
 		
 		tOS_String name() const { return _name; }
 		tOS_Task_Priority priority() const { return _priority; }
@@ -17,7 +17,7 @@ class tOS_Task {
 		void setPriority(tOS_Task_Priority priority) { _priority = priority; }
 		void setPriority(tOS_Size priority) { _priority = (tOS_Task_Priority)priority; }
 		void setState(tOS_Task_State state) { _state = state; }
-		void setSp(uint16_t sp) { _sp = sp; }
+		void setSp(uint16_t sp);
 		void setDelayed(tOS_Size delay);
 		tOS_Size delayed_until() const { return _delayed_until; }
 		void run();
@@ -25,6 +25,7 @@ class tOS_Task {
 	private:
 		inline static tOS_Size _cTasks = 0;
 		uint16_t _sp;
+		uint16_t _stack_min;
 		tOS_String _name;
 		tOS_Task_Priority _priority;
 		tOS_Task_State _state;

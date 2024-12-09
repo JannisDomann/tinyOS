@@ -8,9 +8,19 @@ volatile uint16_t pxCurrentTCB;
 tOS_Task::tOS_Task()
 : _name(""), _callback(nullptr), _priority(tOS_Prio_NONE), _state(tOS_State_SUSPENDED) {}
 
-tOS_Task::tOS_Task(tOS_String name, tOS_Task_Callback callback, tOS_Task_Priority priority, tOS_Task_State state)
+tOS_Task::tOS_Task(tOS_String name, tOS_Task_Callback callback, tOS_Task_Priority priority, tOS_Task_State state, uint16_t stack_size)
 : _name(name), _callback(callback), _priority(priority), _state(state) {
-	_sp = (uint16_t)(tOS_DEF_MIN_STACK_ADR + (++_cTasks)*tOS_DEF_LOCAL_STACK_SIZE);
+	_sp = (uint16_t)(tOS_DEF_MIN_STACK_ADR + (++_cTasks) * stack_size);
+	_stack_min = _sp - stack_size;
+}
+
+void tOS_Task::setSp(uint16_t sp) { 
+	if (sp < _stack_min) {
+		tOS_Error("stack overflow");
+		printf("\t(task: %s sp: %p min_stack: %p)\n", _name, (uint16_t*)sp, (uint16_t*)_stack_min);
+		return;
+	}
+	_sp = sp; 
 }
 
 void tOS_Task::setDelayed(tOS_Size delay) {
