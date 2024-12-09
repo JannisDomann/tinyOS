@@ -11,6 +11,12 @@ void tOS_Out(tOS_String str);
 
 tOS_Size max(tOS_Size a, tOS_Size b);
 
+class tOS_CriticalSection {
+	public:
+		static void enter() { cli(); } // todo: just disbale timer1A interrupt 
+		static void leave() { sei(); } // todo: just disbale timer1A interrupt 
+};
+
 template <typename T>
 class tOS_Vector {
 	public:
@@ -23,20 +29,21 @@ class tOS_Vector {
 		void push_front(T& item);
 		void pop_front();
 		virtual void push(T item);
-		void pop();
+		virtual void pop();
 		T* begin() { return _items; }
 		T* end() { return (_items+_size); }
 
 	protected:
-		tOS_Size _capacity = 0;
-		tOS_Size _size = 0;
+		tOS_Size _capacity;
+		tOS_Size _size;
 		T* _items;
 };
 
 
+
 template <typename T>
 tOS_Vector<T>::tOS_Vector(tOS_Size capacity)
-: _capacity(capacity) {
+: _capacity(capacity), _size(0) {
 	_items = (T*)malloc(sizeof(T)*_capacity);
 }
 

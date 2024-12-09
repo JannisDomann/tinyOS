@@ -110,8 +110,7 @@ void tOS_Kernel::_scheduler() {
 }
 
 void tOS_Kernel::_idle_task() {
-	while (true)
-		// printf("idle ");
+	while (true) 
 		;
 	/* todo:
 		- enter sleepmode
